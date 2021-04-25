@@ -1,4 +1,4 @@
-var officeHrs = {};
+var dailySchedule = [];
 var currentDate = moment();
 var currentDay = function() {
     var currentDayEl = $("#currentDay")[0];
@@ -11,39 +11,72 @@ var currentDay = function() {
 };
 
 var createSchedule = function(taskList, i) {
-    var taskLi = $("<li>").appendTo(taskList);
-    taskLi.addClass("row");
-    taskLi.addClass("time-block");
 
-    var hourEl = $("<span>").appendTo(taskLi);
-    hourEl.addClass("col-1");
-    hourEl.addClass("hour");
+    var taskLi = $("<li>")
+        .addClass("row")
+        .addClass("time-block")
+        .appendTo(taskList);
+
+
+    var hourEl = $("<div>")
+        .addClass("col-1")
+        .addClass("hour")
+        .appendTo(taskLi);
+
     hourEl[0].innerHTML = moment({hour: i}).format("h A");
 
-    var taskEl = $("<textarea>");
-    taskEl.addClass("col-10");
-    taskEl.addClass();
-    taskEl.attr("id", "event-"+ i);
+    var taskEl = $("<textarea>")
+        .addClass("col-10")
+        .addClass()
+        .attr("id", "event-"+ i);
+
     taskEl[0].innerText = "";
     taskLi.append(taskEl);
 
-    var saveBtnEl = $("<button>").appendTo(taskLi);
-    saveBtnEl.addClass("col-1 saveBtn oi oi-cloud-upload");
-    saveBtnEl.attr("block-hr-id", i);
-    saveBtnEl.click(saveSchedule);
+    var saveBtnEl = $("<button>")
+        .addClass("col-1 saveBtn oi oi-cloud-upload")
+        .attr("block-hr-id", i)
+        .click(saveSchedule)
+        .appendTo(taskLi);
+    
+    loadSchedule(taskEl, i);
 
 };
 
-var loadSchedule = function() {
+var loadSchedule = function(taskEl, i) {
+    dailySchedule = JSON.parse(localStorage.getItem("days-schedule"));
+    console.log(dailySchedule);
+    if(!dailySchedule) {
+        dailySchedule = [];
+    }
+
+    if(dailySchedule[i]){
+        taskEl[0].innerText = dailySchedule[i].description;
+    }
+    else {
+
+        var scheduleObject = {
+            time: parseInt(i),
+            description: ''
+        }
+        dailySchedule.push(scheduleObject);
+    }
 
 };
 
-var saveSchedule = function(){
+var saveSchedule = function(event){
+    var blockHour = this.getAttribute("block-hr-id");
+    var blockText = $("#event-"+blockHour).val();
 
+    dailySchedule[blockHour].time = parseInt(blockHour);
+    dailySchedule[blockHour].description = blockText;
+    localStorage.setItem('days-schedule', JSON.stringify(dailySchedule));
 };
 
 var auditSchedule = function(){
 
 };
 
+
 currentDay();
+
