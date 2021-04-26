@@ -13,6 +13,11 @@ textarea{
   padding: 10px;
 }
 
+textarea:focus {
+  border: 1px;
+  border-color:#06AED5; /* I tried to color the border but its not really working this way*/
+}
+
 .jumbotron {
   text-align: center;
   background-color: transparent;
@@ -65,7 +70,35 @@ textarea{
   color: white;
 }
 
-.saveBtn i:hover {
-  font-size: 20px;
+.saveBtn:hover {
+  color: black;
   transition: all .3s ease-in-out;
+  cursor: pointer;
+  
+}
+
+.saveBtn:focus {
+  outline:none;
+}
+
+.container {
+  width: auto;
+}
+
+@media (max-width: 375px) {
+  .container {
+    width: 375px;
+  }
+  .jumbotron {
+    width: 375px;
+  }
+}
+@media (max-width: 576px) {
+  .display-3 {
+    font-size: 3.5rem
+  }
+  .hour {
+    font-size: 12px;
+  }
+
 }
